@@ -13,10 +13,8 @@ class MyApp extends StatelessWidget {
       title: 'Medication Tracker',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Colors.deepPurple).copyWith(
-          secondary: Colors.amberAccent,
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
+            .copyWith(secondary: Colors.amberAccent, onPrimary: Colors.white),
         useMaterial3: true,
       ),
       initialRoute: TabsScreen.routeName,
