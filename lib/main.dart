@@ -14,7 +14,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
-            .copyWith(secondary: Colors.amberAccent, onPrimary: Colors.white),
+            .copyWith(secondary: Colors.amberAccent),
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+        ),
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontSize: 20,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
         useMaterial3: true,
       ),
       initialRoute: TabsScreen.routeName,
