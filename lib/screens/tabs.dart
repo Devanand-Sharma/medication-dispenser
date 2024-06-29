@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:medication_app/screens/history.dart';
 import 'package:medication_app/screens/home.dart';
 import 'package:medication_app/screens/medication.dart';
-import 'package:medication_app/screens/more.dart';
+import 'package:medication_app/widgets/more_drawer.dart';
 
-const pages = [
+const List<Map<String, dynamic>> pages = [
   {
     'page': HomeScreen(),
     'title': 'Home',
@@ -18,10 +18,6 @@ const pages = [
     'page': HistoryScreen(),
     'title': 'History',
   },
-  {
-    'page': MoreScreen(),
-    'title': 'More',
-  }
 ];
 
 class TabsScreen extends StatefulWidget {
@@ -33,7 +29,7 @@ class TabsScreen extends StatefulWidget {
 }
 
 class __TabsScreenState extends State<TabsScreen> {
-  late List<Map<String, Object>> _pages;
+  late List<Map<String, dynamic>> _pages;
   int _selectedPageIndex = 0;
 
   @override
@@ -58,6 +54,7 @@ class __TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const MoreDrawer(),
       body: _pages[_selectedPageIndex]['page'] as Widget,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
@@ -81,11 +78,6 @@ class __TabsScreenState extends State<TabsScreen> {
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: const Icon(Icons.calendar_month_rounded),
             label: _pages[2]['title'] as String,
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            icon: const Icon(Icons.more_horiz_rounded),
-            label: _pages[3]['title'] as String,
           ),
         ],
       ),

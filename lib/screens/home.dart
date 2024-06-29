@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+
 import 'package:medication_app/widgets/home_medication_card.dart';
 
 class HomeScreen extends StatelessWidget {
+  // final BuildContext parentContext;
   const HomeScreen({super.key});
   static const appBarHeight = 115.0;
   static const appBarSpacing = 5.0;
@@ -46,6 +47,9 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer()),
         centerTitle: true,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -55,16 +59,21 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {},
           )
         ],
-        title: const Row(
+        title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.account_circle,
-              size: 40,
+            CircleAvatar(
+              radius: 16,
+              backgroundColor: Theme.of(context).colorScheme.onPrimary,
+              child: Icon(
+                Icons.person,
+                size: 24,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
-            Gap(appBarSpacing),
-            Text(
-              'Harambe',
+            const Gap(appBarSpacing),
+            const Text(
+              'John Doe',
             )
           ],
         ),
