@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:medication_app/screens/tabs.dart';
 
 void main() => runApp(const MyApp());
