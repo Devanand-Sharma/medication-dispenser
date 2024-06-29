@@ -18,12 +18,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.calendar_month_rounded),
-        ),
+            icon: const Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer()),
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.calendar_month_rounded),
+          ),
           IconButton(
             onPressed: () {},
             icon: const Icon(Ionicons.document_text),
