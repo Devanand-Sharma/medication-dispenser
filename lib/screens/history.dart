@@ -46,6 +46,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 color: Colors.deepPurple.shade300,
                 shape: BoxShape.circle,
               ),
+              outsideTextStyle: const TextStyle(color: Colors.black),
               selectedTextStyle: const TextStyle(color: Colors.white),
               todayTextStyle: const TextStyle(color: Colors.black),
             ),
