@@ -1,16 +1,13 @@
-# medication_app
+# Smart Medication App
 
-A new Flutter project.
+This project is to help track, manage, and remind users of when to take their medications.
 
-## Getting Started
+# Description
 
-This project is a starting point for a Flutter application.
+Sometimes when you have too many medications, it can become overwhelming to track all of them and remember certain details about medications and when to take them. This apps purpose is to simplify this process. User's won't have to think about when to take their meds, when they're running low, what restrictions apply when taking certain medications, and more. This app will do all the heavy lifting for you (once it is paired with its hardware counterpart).
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Stack
+### Front-end
+**Flutter**
+### Back-end
+**TBD**
