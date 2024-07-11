@@ -36,7 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   gap: ^3.0.1
   intl: ^0.19.0
-  ionicons: ^0.2.2
+  # We can re-add this package if we need to use it, default icons preferred over this
+  # ionicons: ^0.2.2
   table_calendar: ^3.1.2
 
 dev_dependencies:

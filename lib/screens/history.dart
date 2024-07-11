@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -21,16 +21,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
         leading: IconButton(
             icon: const Icon(Icons.menu),
             onPressed: () => Scaffold.of(context).openDrawer()),
+        title: const Text('History'),
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         actions: [
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.calendar_month_rounded),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Ionicons.document_text),
-          )
         ],
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
