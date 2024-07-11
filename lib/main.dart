@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:medication_app/screens/appointments.dart';
 import 'package:medication_app/screens/doctors.dart';
+import 'package:medication_app/screens/new_medication.dart';
 import 'package:medication_app/screens/notes.dart';
 import 'package:medication_app/screens/refills.dart';
 import 'package:medication_app/screens/reports.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
       routes: {
         AppointmentsScreen.routeName: (context) => const AppointmentsScreen(),
         DoctorsScreen.routeName: (context) => const DoctorsScreen(),
+        NewMedicationScreen.routeName: (context) => const NewMedicationScreen(),
         NotesScreen.routeName: (context) => const NotesScreen(),
         RefillsScreen.routeName: (context) => const RefillsScreen(),
         ReportsScreen.routeName: (context) => const ReportsScreen(),
