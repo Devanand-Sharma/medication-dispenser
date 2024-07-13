@@ -46,8 +46,8 @@ class HomeMedicationCard extends StatelessWidget {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       foregroundColor: WidgetStateProperty.all(Colors.white),
-                      backgroundColor:
-                          WidgetStateProperty.all(Colors.deepPurple.shade300),
+                      backgroundColor: WidgetStateProperty.all(
+                          Theme.of(context).colorScheme.primary),
                     ),
                     onPressed: () {
                       // Add your button 2 logic here
