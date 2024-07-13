@@ -39,6 +39,7 @@ dependencies:
   # We can re-add this package if we need to use it, default icons preferred over this
   # ionicons: ^0.2.2
   table_calendar: ^3.1.2
+  simple_circular_progress_bar: ^1.0.2
 
 dev_dependencies:
   flutter_test:
