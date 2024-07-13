@@ -73,7 +73,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 _focusedDay = focusedDay;
               },
             ),
-            const Divider(),
+            const Divider(height: 1, thickness: 1),
             Expanded(
               child: DayView(
                 key: _dayViewKey,
@@ -92,6 +92,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 },
                 showVerticalLine: true,
                 showLiveTimeLineInAllDays: true,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 minDay: DateTime(2020),
                 maxDay: DateTime(2030),
                 initialDay: _selectedDay,
