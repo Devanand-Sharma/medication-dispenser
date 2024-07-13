@@ -5,7 +5,7 @@ import 'package:medication_app/screens/doctors.dart';
 import 'package:medication_app/screens/new_medication.dart';
 import 'package:medication_app/screens/notes.dart';
 import 'package:medication_app/screens/refills.dart';
-import 'package:medication_app/screens/reports.dart';
+import 'package:medication_app/screens/report.dart';
 import 'package:medication_app/screens/settings.dart';
 import 'package:medication_app/screens/tabs.dart';
 
@@ -24,6 +24,9 @@ class MyApp extends StatelessWidget {
             .copyWith(secondary: Colors.amberAccent),
         textTheme: TextTheme(
           bodyLarge: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+          titleLarge: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+          headlineSmall:
+              TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           headlineMedium:
               TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
@@ -42,7 +45,7 @@ class MyApp extends StatelessWidget {
         NewMedicationScreen.routeName: (context) => const NewMedicationScreen(),
         NotesScreen.routeName: (context) => const NotesScreen(),
         RefillsScreen.routeName: (context) => const RefillsScreen(),
-        ReportsScreen.routeName: (context) => const ReportsScreen(),
+        ReportScreen.routeName: (context) => const ReportScreen(),
         SettingsScreen.routeName: (context) => const SettingsScreen(),
         TabsScreen.routeName: (context) => const TabsScreen(),
       },
