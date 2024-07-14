@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class NewMedicationScreen extends StatefulWidget {
   static const String routeName = '/new-medication';
@@ -44,7 +45,7 @@ class NewMedicationScreenState extends State<NewMedicationScreen> {
                 },
                 onSaved: (value) => _medicationName = value,
               ),
-              const SizedBox(height: 16),
+              const Gap(16),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
                   labelText: 'Administration Route',
@@ -65,7 +66,7 @@ class NewMedicationScreenState extends State<NewMedicationScreen> {
                 },
                 onChanged: (value) => setState(() => _administrationRoute = value),
               ),
-              const SizedBox(height: 16),
+              const Gap(16),
               Row(
                 children: [
                   Expanded(
@@ -88,7 +89,7 @@ class NewMedicationScreenState extends State<NewMedicationScreen> {
                       onSaved: (value) => _frequency = int.tryParse(value!),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const Gap(16),
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       decoration: const InputDecoration(
@@ -113,7 +114,7 @@ class NewMedicationScreenState extends State<NewMedicationScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const Gap(24),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
