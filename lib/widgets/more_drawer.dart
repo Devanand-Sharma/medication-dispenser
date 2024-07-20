@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 
 final List<Map<String, dynamic>> drawerList = [
   {
-    'icon': Icons.notes_rounded,
-    'title': 'Notes',
-    'route': '/notes',
-  },
-  {
     'icon': Icons.event_rounded,
     'title': 'Appointments',
     'route': '/appointments',

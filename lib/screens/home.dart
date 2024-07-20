@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: Colors.deepPurple.shade100,
+        color: Theme.of(context).colorScheme.primaryContainer,
         child: Column(children: [
           _buildSummaryReport(context),
           Expanded(

@@ -44,7 +44,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   shape: BoxShape.circle,
                 ),
                 selectedDecoration: BoxDecoration(
-                  color: Colors.deepPurple.shade300,
+                  color: Theme.of(context).primaryColor,
                   shape: BoxShape.circle,
                 ),
                 outsideTextStyle: const TextStyle(color: Colors.black),

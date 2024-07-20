@@ -42,7 +42,7 @@ class _MedicationScreenState extends State<MedicationScreen> {
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Container(
-        color: Colors.deepPurple.shade100,
+        color: Theme.of(context).colorScheme.primaryContainer,
         child: Column(children: [
           Expanded(
             child: ListView.builder(
