@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medication_app/screens/medication_form.dart';
 
 import 'package:medication_app/widgets/new_medication_item.dart';
 
@@ -30,7 +31,11 @@ class NewMedicationModal extends StatelessWidget {
               icon: Icons.add,
               action: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushNamed('/new-medication');
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const MedicationFormScreen(),
+                  ),
+                );
               },
             ),
           ],

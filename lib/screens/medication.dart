@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:medication_app/database_manager/data/dummy_medications.dart';
+import 'package:medication_app/providers/medication_provider.dart';
 
 import 'package:medication_app/widgets/medication_card.dart';
 import 'package:medication_app/widgets/new_medication_modal.dart';
 
-class MedicationScreen extends StatefulWidget {
+//! Revert to ConsumerWidget When Dummy Data is Not Needed
+//TODO: Can Make More Smooth with FutureBuilder
+class MedicationScreen extends ConsumerStatefulWidget {
   const MedicationScreen({super.key});
 
   @override
-  State<MedicationScreen> createState() => _MedicationScreenState();
+  ConsumerState<MedicationScreen> createState() => _MedicationScreenState();
 }
 
-class _MedicationScreenState extends State<MedicationScreen> {
+class _MedicationScreenState extends ConsumerState<MedicationScreen> {
+  @override
+  void initState() {
+    // createDummyMedications(ref);
+    super.initState();
+  }
+
   void _createNewMedication(BuildContext ctx) {
     showModalBottomSheet(
       context: ctx,
@@ -26,6 +38,8 @@ class _MedicationScreenState extends State<MedicationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final medications = ref.watch(medicationProvider);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -48,9 +62,10 @@ class _MedicationScreenState extends State<MedicationScreen> {
             child: ListView.builder(
               padding: const EdgeInsets.all(5),
               shrinkWrap: true,
-              itemCount: 4,
+              itemCount: medications.length,
               itemBuilder: (context, index) {
-                return const MedicationCard();
+                final medication = medications[index];
+                return MedicationCard(medication);
               },
             ),
           )
