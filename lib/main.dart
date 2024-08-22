@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:medication_app/screens/appointments.dart';
 import 'package:medication_app/screens/doctors.dart';
@@ -8,7 +10,14 @@ import 'package:medication_app/screens/report.dart';
 import 'package:medication_app/screens/settings.dart';
 import 'package:medication_app/screens/tabs.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
