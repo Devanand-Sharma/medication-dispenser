@@ -73,10 +73,51 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
     }
   }
 
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Confirm Deletion',
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+          ),
+          content:
+              const Text('Are you sure you want to delete this medication?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                ref
+                    .read(medicationProvider.notifier)
+                    .removeMedication(widget.medication!);
+                // Go back to medications screen
+                Navigator.of(context).pop();
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          widget.medication != null
+              ? IconButton(
+                  onPressed: () => _showDeleteConfirmationDialog(context),
+                  icon: const Icon(Icons.delete),
+                )
+              : const SizedBox(),
+        ],
         title: Text(
             widget.medication == null ? 'Add Medication' : 'Update Medication'),
         foregroundColor: Theme.of(context).colorScheme.onPrimary,

@@ -34,7 +34,7 @@ class MedicationNotifier extends StateNotifier<List<Medication>> {
   }
 
   Future<void> clearMedications() async {
-    state = [];
     await HiveManager.clear<Medication>(BoxNames.medications);
+    state = [];
   }
 }
