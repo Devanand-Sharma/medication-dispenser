@@ -9,7 +9,12 @@ import 'package:medication_app/database_manager/models/medication.dart';
 
 class MedicationFormScreen extends ConsumerStatefulWidget {
   final Medication? medication;
-  const MedicationFormScreen({super.key, this.medication});
+  final bool isEditing;
+  const MedicationFormScreen({
+    super.key,
+    this.medication,
+    this.isEditing = false
+  });
 
   @override
   MedicationFormScreenState createState() => MedicationFormScreenState();
@@ -57,7 +62,7 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
         route: parseMedicationRoute(_medicationData['route']),
       );
 
-      if (widget.medication == null) {
+      if (!widget.isEditing) {
         // Add Medication to Hive+Riverpod
         ref.read(medicationProvider.notifier).addMedication(newMedication);
       } else {
@@ -69,7 +74,7 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
       }
 
       if (!context.mounted) return;
-      Navigator.of(context).pop();
+      Navigator.of(context).popUntil(ModalRoute.withName('/'));
     }
   }
 
@@ -111,15 +116,14 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          widget.medication != null
+          widget.isEditing
               ? IconButton(
                   onPressed: () => _showDeleteConfirmationDialog(context),
                   icon: const Icon(Icons.delete),
                 )
               : const SizedBox(),
         ],
-        title: Text(
-            widget.medication == null ? 'Add Medication' : 'Update Medication'),
+        title: Text(widget.isEditing ? 'Update Medication': 'Add Medication'),
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
@@ -163,9 +167,7 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
               ),
               const Gap(16),
               TextFormField(
-                initialValue: _medicationData['count'] != null
-                    ? _medicationData['count'].toString()
-                    : null,
+                initialValue: _medicationData['count']?.toString(),
                 onSaved: (value) =>
                     _medicationData['count'] = int.tryParse(value!),
                 decoration: const InputDecoration(
@@ -186,9 +188,7 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
               ),
               const Gap(16),
               DropdownButtonFormField<String>(
-                value: _medicationData['route'] != null
-                    ? _medicationData['route']
-                    : null,
+                value: _medicationData['route'],
                 onChanged: (value) =>
                     setState(() => _medicationData['route'] = value),
                 decoration: const InputDecoration(
@@ -214,9 +214,7 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
                 children: [
                   Expanded(
                     child: TextFormField(
-                      initialValue: _medicationData['frequency'] != null
-                          ? _medicationData['frequency'].toString()
-                          : null,
+                      initialValue: _medicationData['frequency']?.toString(),
                       onSaved: (value) => _medicationData['frequency'] =
                           int.tryParse(value!) ?? 0,
                       decoration: const InputDecoration(
@@ -239,9 +237,7 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
                   const Gap(16),
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: _medicationData['frequencyUnit'] != null
-                          ? _medicationData['frequencyUnit']
-                          : null,
+                      value: _medicationData['frequencyUnit'],
                       onChanged: (value) => setState(
                           () => _medicationData['frequencyUnit'] = value),
                       onSaved: (value) =>
@@ -277,9 +273,7 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
                     backgroundColor: WidgetStateProperty.all(
                         Theme.of(context).colorScheme.primary),
                   ),
-                  child: Text(widget.medication == null
-                      ? 'Add Medication'
-                      : 'Update Medication'),
+                  child: Text(widget.isEditing ? 'Update Medication': 'Add Medication'),
                 ),
               ),
             ],

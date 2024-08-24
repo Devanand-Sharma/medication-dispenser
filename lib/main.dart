@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
@@ -9,6 +10,7 @@ import 'package:medication_app/database_manager/models/dose_schedule.dart';
 import 'package:medication_app/database_manager/models/medication.dart';
 
 import 'package:medication_app/screens/appointments.dart';
+import 'package:medication_app/screens/cap_prescription.dart';
 import 'package:medication_app/screens/doctors.dart';
 import 'package:medication_app/screens/refills.dart';
 import 'package:medication_app/screens/report.dart';
@@ -17,6 +19,12 @@ import 'package:medication_app/screens/tabs.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final cameras = await availableCameras();
+  CameraDescription? camera;
+  if (cameras.isNotEmpty) {
+    camera = cameras.first;
+  }
 
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
@@ -28,11 +36,16 @@ void main() async {
   Hive.registerAdapter(DosageIntervalAdapter());
   Hive.registerAdapter(DoseScheduleAdapter());
 
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(child: MyApp(camera: camera)));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({
+    super.key,
+    required this.camera
+  });
+
+  final CameraDescription? camera;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +75,7 @@ class MyApp extends StatelessWidget {
       routes: {
         AppointmentsScreen.routeName: (context) => const AppointmentsScreen(),
         DoctorsScreen.routeName: (context) => const DoctorsScreen(),
+        CapturePrescriptionScreen.routeName: (context) => CapturePrescriptionScreen(camera: camera),
         RefillsScreen.routeName: (context) => const RefillsScreen(),
         ReportScreen.routeName: (context) => const ReportScreen(),
         SettingsScreen.routeName: (context) => const SettingsScreen(),

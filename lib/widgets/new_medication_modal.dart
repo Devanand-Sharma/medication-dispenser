@@ -24,7 +24,10 @@ class NewMedicationModal extends StatelessWidget {
             NewMedicationItem(
               label: 'Picture of Prescription Bottle',
               icon: Icons.camera,
-              action: () => Navigator.of(context).pop(),
+              action: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed('/cap-prescription');
+              },
             ),
             NewMedicationItem(
               label: 'Custom Medication',
