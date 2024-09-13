@@ -17,7 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   String? _selectedGender;
-  DateTime? _selectedDate;
+  DateTime? _selectedDateOfBirth;
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     print('Attempting to sign up - Email: $email, Password: $password, First Name: $firstName, Last Name: $lastName');
 
     if (email.isEmpty || password.isEmpty || firstName.isEmpty || lastName.isEmpty) {
-      _showSnackBar('Please fill in all fields');
+      _showSnackBar('Please fill in all fields', isError: true);
       return;
     }
 
@@ -54,7 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       password: password,
       firstName: firstName,
       lastName: lastName,
-      birthday: _selectedDate,
+      dateOfBirth: _selectedDateOfBirth,
       gender: _selectedGender,
     );
 
@@ -75,28 +75,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Navigator.of(context).pop();
     } catch (e) {
       print('Error during sign up: $e');
-      if (mounted) _showSnackBar('An error occurred during sign up: $e');
+      if (mounted) _showSnackBar('An error occurred during sign up: $e', isError: true);
     }
   }
 
-  void _showSnackBar(String message) {
+  void _showSnackBar(String message, {bool isError = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+      ),
     );
-  }  Future<void> _clearUsers() async {
+  }
+
+  Future<void> _clearUsers() async {
     try {
       final userBox = await Hive.openBox<User>('users');
       await userBox.clear();
       print('All users cleared. Current box length: ${userBox.length}');
       await userBox.close();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('All users cleared')),
-      );
+      _showSnackBar('All users cleared');
     } catch (e) {
       print('Error clearing users: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error clearing users: $e')),
-      );
+      _showSnackBar('Error clearing users: $e', isError: true);
     }
   }
 
@@ -176,15 +177,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     firstDate: DateTime(1900),
                     lastDate: DateTime.now(),
                   );
-                  if (picked != null && picked != _selectedDate) {
+                  if (picked != null && picked != _selectedDateOfBirth) {
                     setState(() {
-                      _selectedDate = picked;
+                      _selectedDateOfBirth = picked;
                     });
                   }
                 },
                 child: InputDecorator(
                   decoration: InputDecoration(
-                    labelText: 'Birthday',
+                    labelText: 'Date of Birth',
                     fillColor: Theme.of(context).colorScheme.surface,
                     filled: true,
                     border: OutlineInputBorder(
@@ -195,9 +196,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        _selectedDate == null
+                        _selectedDateOfBirth == null
                             ? 'Select Date'
-                            : '${_selectedDate!.month}/${_selectedDate!.day}/${_selectedDate!.year}',
+                            : '${_selectedDateOfBirth!.month}/${_selectedDateOfBirth!.day}/${_selectedDateOfBirth!.year}',
                         style: const TextStyle(color: Colors.black),
                       ),
                       const Icon(Icons.calendar_today),

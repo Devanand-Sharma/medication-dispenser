@@ -8,7 +8,7 @@ class UserUtils {
       password: 'password123',
       firstName: 'John',
       lastName: 'Doe',
-      birthday: DateTime(1990, 1, 1),
+      dateOfBirth: DateTime(1990, 1, 1),
       gender: 'Male',
     );
 

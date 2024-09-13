@@ -21,7 +21,7 @@ class UserAdapter extends TypeAdapter<User> {
       password: fields[1] as String,
       firstName: fields[2] as String?,
       lastName: fields[3] as String?,
-      birthday: fields[4] as DateTime?,
+      dateOfBirth: fields[4] as DateTime?,
       gender: fields[5] as String?,
     );
   }
@@ -39,7 +39,7 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(3)
       ..write(obj.lastName)
       ..writeByte(4)
-      ..write(obj.birthday)
+      ..write(obj.dateOfBirth)
       ..writeByte(5)
       ..write(obj.gender);
   }

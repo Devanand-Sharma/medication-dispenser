@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
     print('Attempting login with - Email: $email, Password: $password');
 
     if (email.isEmpty || password.isEmpty) {
-      _showSnackBar('Please enter both email and password');
+      _showSnackBar('Please enter both email and password', isError: true);
       return;
     }
 
@@ -72,17 +72,20 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
       } else {
         print('Login failed: Invalid email or password');
-        _showSnackBar('Invalid email or password');
+        _showSnackBar('Invalid email or password', isError: true);
       }
     } catch (e) {
       print('Error during login: $e');
-      if (mounted) _showSnackBar('An error occurred during login: $e');
+      if (mounted) _showSnackBar('An error occurred during login: $e', isError: true);
     }
   }
 
-  void _showSnackBar(String message) {
+  void _showSnackBar(String message, {bool isError = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+      ),
     );
   }
 

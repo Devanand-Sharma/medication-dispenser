@@ -17,7 +17,7 @@ class User extends HiveObject {
   String? lastName;
 
   @HiveField(4)
-  DateTime? birthday;
+  DateTime? dateOfBirth;
 
   @HiveField(5)
   String? gender;
@@ -27,7 +27,7 @@ class User extends HiveObject {
     required this.password,
     this.firstName,
     this.lastName,
-    this.birthday,
+    this.dateOfBirth,
     this.gender,
   });
 }
