@@ -1,40 +1,43 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
 
-import 'package:medication_app/database_manager/hive_manager.dart';
-import 'package:medication_app/database_manager/models/medication.dart';
+import 'package:medication_app/models/medication.dart';
 
-class MedicationNotifier extends StateNotifier<List<Medication>> {
-  MedicationNotifier() : super([]) {
-    getMedications();
+class MedicationNotifier extends ChangeNotifier {
+  List<Medication> medications = [];
+
+  MedicationNotifier({
+    required this.medications,
+  });
+
+  int get medicationCount {
+    return medications.length;
   }
 
-  Future<void> getMedications() async {
-    final medications =
-        await HiveManager.getAll<Medication>(BoxNames.medications);
-    state = medications;
+  Medication getMedication(String id) {
+    return medications.firstWhere((e) => e.id == id);
   }
 
-  Future<int> getMedicationCount() async {
-    return await HiveManager.getLength<Medication>(BoxNames.medications);
+  Medication addMedication(Medication medication) {
+    medications = [...medications, medication];
+    notifyListeners();
+    return medication;
   }
 
-  Future<void> addMedication(Medication medication) async {
-    state = [...state, medication];
-    await HiveManager.add<Medication>(BoxNames.medications, medication);
+  Medication removeMedication(Medication medication) {
+    medications = medications.where((e) => e.id != medication.id).toList();
+    notifyListeners();
+    return medication;
   }
 
-  Future<void> removeMedication(Medication medication) async {
-    state = state.where((e) => e.key != medication.key).toList();
-    await HiveManager.delete<Medication>(BoxNames.medications, medication.key);
+  Medication updateMedication(Medication medication) {
+    medications =
+        medications.map((e) => e.id == medication.id ? medication : e).toList();
+    notifyListeners();
+    return medication;
   }
 
-  Future<void> updateMedication(int key, Medication medication) async {
-    state = state.map((e) => e.key == key ? medication : e).toList();
-    await HiveManager.update<Medication>(BoxNames.medications, key, medication);
-  }
-
-  Future<void> clearMedications() async {
-    await HiveManager.clear<Medication>(BoxNames.medications);
-    state = [];
+  void clearMedications() {
+    medications = [];
+    notifyListeners();
   }
 }

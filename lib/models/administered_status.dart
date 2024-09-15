@@ -1,0 +1,4 @@
+enum AdministeredStatus {
+  taken,
+  skipped,
+}

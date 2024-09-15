@@ -1,31 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:medication_app/database_manager/models/medication.dart';
-import 'package:medication_app/screens/medication_form.dart';
+import 'package:medication_app/models/medication.dart';
+
+import 'package:medication_app/screens/medication_detail.dart';
 
 enum MoreOptions { edit, delete }
 
-class MedicationCard extends ConsumerStatefulWidget {
+class MedicationCard extends StatelessWidget {
   final Medication medication;
 
   const MedicationCard(this.medication, {super.key});
-
-  @override
-  ConsumerState<MedicationCard> createState() => _MedicationCardState();
-}
-
-class _MedicationCardState extends ConsumerState<MedicationCard> {
-  MoreOptions? selectedItem;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => MedicationFormScreen(
-            medication: widget.medication,
-            isEditing: true,
+          builder: (context) => MedicationDetailScreen(
+            medication,
           ),
         ),
       ),
@@ -37,16 +29,15 @@ class _MedicationCardState extends ConsumerState<MedicationCard> {
                 Icons.medication_rounded,
                 size: 40,
               ),
-              title: Text(widget.medication.name),
+              title: Text(medication.name),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.medication.condition,
+                  Text(medication.condition,
                       style: Theme.of(context).textTheme.bodySmall),
-                  widget.medication.count != null
-                      ? Text('x${widget.medication.count.toString()}',
-                          style: Theme.of(context).textTheme.bodySmall)
-                      : const SizedBox(),
+                  Text(
+                      'x${medication.prescription.remainingQuantity.toString()}',
+                      style: Theme.of(context).textTheme.bodySmall),
                 ],
               ),
               contentPadding: const EdgeInsets.fromLTRB(16, 0, 8, 0),
