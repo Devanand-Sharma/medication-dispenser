@@ -1,27 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:medication_app/database_manager/data/dummy_medications.dart';
 import 'package:medication_app/providers/medication_provider.dart';
 
 import 'package:medication_app/widgets/medication_card.dart';
 import 'package:medication_app/widgets/new_medication_modal.dart';
 
-//! Revert to ConsumerWidget When Dummy Data is Not Needed
-//TODO: Can Make More Smooth with FutureBuilder
-class MedicationScreen extends ConsumerStatefulWidget {
+class MedicationScreen extends ConsumerWidget {
   const MedicationScreen({super.key});
-
-  @override
-  ConsumerState<MedicationScreen> createState() => _MedicationScreenState();
-}
-
-class _MedicationScreenState extends ConsumerState<MedicationScreen> {
-  @override
-  void initState() {
-    // createDummyMedications(ref);
-    super.initState();
-  }
 
   void _createNewMedication(BuildContext ctx) {
     showModalBottomSheet(
@@ -37,8 +23,8 @@ class _MedicationScreenState extends ConsumerState<MedicationScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final medications = ref.watch(medicationProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final medications = ref.watch(medicationProvider).medications;
 
     return Scaffold(
       appBar: AppBar(

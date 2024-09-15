@@ -1,10 +1,14 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:medication_app/database_manager/models/dose_schedule.dart';
-import 'package:medication_app/database_manager/models/medication.dart';
-import 'package:medication_app/screens/medication_form.dart';
+import 'package:uuid/uuid.dart';
 
-import '../database_manager/models/dose.dart';
+import 'package:medication_app/models/medication.dart';
+import 'package:medication_app/models/medication_route.dart';
+import 'package:medication_app/models/medication_frequency.dart';
+import 'package:medication_app/models/prescription.dart';
+import 'package:medication_app/models/dosage.dart';
+
+import 'package:medication_app/screens/medication_form.dart';
 
 class CameraWidget extends StatefulWidget {
   final CameraDescription? camera;
@@ -53,23 +57,31 @@ class _CameraWidgetState extends State<CameraWidget> {
       // final image = await _controller.takePicture();
       // TODO: process image here
 
+      const uuid = Uuid();
+
       if (context.mounted) {
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => MedicationFormScreen(
               medication: Medication(
-                doseSchedule: DoseSchedule(
-                  dose: Dose(
-                    count: 100,
-                    unit: "pills"
-                  ),
-                  frequency: 100,
-                  interval: DosageInterval.hour,
+                id: uuid.v4(),
+                name: 'Camera Medication',
+                condition: 'Medcation App',
+                route: MedicationRoute.inhaler,
+                dose: 1,
+                dosage: Dosage(
+                  frequency: MedicationFrequency.onceADay,
+                  scheduledTimes: [
+                    const TimeOfDay(hour: 2, minute: 59),
+                  ],
+                  startDate: DateTime(2024, 9, 1, 2, 59),
+                  endDate: DateTime(2024, 9, 29, 2, 59),
                 ),
-                name: 'Keesh Butt',
-                condition: 'Love',
-                route: MedicationRoute.anal,
-                count: 12,
+                prescription: Prescription(
+                    totalQuantity: 1000,
+                    remainingQuantity: 500,
+                    thresholdQuantity: 10,
+                    isRefillReminder: true),
               ),
               isEditing: false,
             ),
@@ -100,15 +112,12 @@ class _CameraWidgetState extends State<CameraWidget> {
             return const Center(child: CircularProgressIndicator());
           },
         ),
-  
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => capturePicture(context),
-        child: Icon(
-          color: Theme.of(context).colorScheme.inverseSurface,
-          Icons.camera
-        )
-      ),
+          onPressed: () => capturePicture(context),
+          child: Icon(
+              color: Theme.of(context).colorScheme.inverseSurface,
+              Icons.camera)),
     );
   }
 }
@@ -119,9 +128,8 @@ class NoCameraWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: Text('NO ACCESSIBLE CAMERA'),
-      )
-    );
+        body: Center(
+      child: Text('NO ACCESSIBLE CAMERA'),
+    ));
   }
 }

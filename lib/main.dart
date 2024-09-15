@@ -5,9 +5,6 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:medication_app/database_manager/models/dose.dart';
-import 'package:medication_app/database_manager/models/dose_schedule.dart';
-import 'package:medication_app/database_manager/models/medication.dart';
 import 'package:medication_app/database_manager/models/user.dart';
 
 import 'package:medication_app/screens/appointments.dart';
@@ -33,18 +30,10 @@ void main() async {
   Hive.init(appDocumentDirectory.path);
 
   // Register Hive Adapters
-  Hive.registerAdapter(MedicationAdapter());
-  Hive.registerAdapter(MedicationRouteAdapter());
-  Hive.registerAdapter(DoseAdapter());
-  Hive.registerAdapter(DosageIntervalAdapter());
-  Hive.registerAdapter(DoseScheduleAdapter());
   Hive.registerAdapter(UserAdapter());
 
   // Open Hive boxes
   await Hive.openBox<User>('users');
-  await Hive.openBox<Medication>('medications');
-  await Hive.openBox<Dose>('doses');
-  await Hive.openBox<DoseSchedule>('doseSchedules');
 
   runApp(ProviderScope(child: MyApp(camera: camera)));
 }
@@ -63,8 +52,11 @@ class MyApp extends StatelessWidget {
       title: 'Medication Tracker',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)
-            .copyWith(secondary: Colors.amberAccent),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Colors.deepPurple).copyWith(
+          secondary: Colors.amberAccent,
+          onSurface: Colors.black87,
+        ),
         textTheme: TextTheme(
           bodyLarge: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           titleLarge: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
