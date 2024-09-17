@@ -1,0 +1,1 @@
+enum OperationStatus { success, failure }

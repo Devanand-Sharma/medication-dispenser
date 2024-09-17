@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:medication_app/models/operation_status.dart';
 
 import 'package:medication_app/providers/medication_provider.dart';
 import 'package:medication_app/database_manager/models/dose.dart';
@@ -57,15 +60,43 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
         route: parseMedicationRoute(_medicationData['route']),
       );
 
+      OperationStatus response;
+
       if (widget.medication == null) {
         // Add Medication to Hive+Riverpod
-        ref.read(medicationProvider.notifier).addMedication(newMedication);
+        response = await ref
+            .read(medicationProvider.notifier)
+            .addMedication(newMedication);
+        if (!context.mounted) return;
+        if (response == OperationStatus.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Successfully added medication')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content:
+                    Text('Erorr adding medication. Please try again later.')),
+          );
+        }
       } else {
         // Update Medication in Hive+Riverpod
-        ref.read(medicationProvider.notifier).updateMedication(
+        response = await ref.read(medicationProvider.notifier).updateMedication(
               widget.medication!.key,
               newMedication,
             );
+        if (!context.mounted) return;
+        if (response == OperationStatus.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Successfully updated medication')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text(
+                    'Failed to update medication. Please try again later.')),
+          );
+        }
       }
 
       if (!context.mounted) return;
@@ -90,12 +121,25 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
-                ref
+                final response = await ref
                     .read(medicationProvider.notifier)
                     .removeMedication(widget.medication!);
                 // Go back to medications screen
+                if (!context.mounted) return;
+                if (response == OperationStatus.success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Successfully deleted medication')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text(
+                            'Failed to delete medication. Please try again later.')),
+                  );
+                }
                 Navigator.of(context).pop();
               },
               child: const Text('Delete'),
