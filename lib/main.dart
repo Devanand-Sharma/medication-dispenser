@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      initialRoute: LoginScreen.routeName,
+      initialRoute: TabsScreen.routeName,
       routes: {
         LoginScreen.routeName: (context) => const LoginScreen(),
         SignUpScreen.routeName: (context) => const SignUpScreen(),

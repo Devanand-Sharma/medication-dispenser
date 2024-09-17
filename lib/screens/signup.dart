@@ -28,8 +28,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> _checkExistingUsers() async {
     try {
       final userBox = await Hive.openBox<User>('users');
-      final users = userBox.values.toList();
-      print('Existing users: ${users.map((u) => '${u.email}: ${u.firstName} ${u.lastName}').join(', ')}');
       await userBox.close();
     } catch (e) {
       print('Error checking existing users: $e');
@@ -41,8 +39,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final password = _passwordController.text.trim();
     final firstName = _firstNameController.text.trim();
     final lastName = _lastNameController.text.trim();
-
-    print('Attempting to sign up - Email: $email, Password: $password, First Name: $firstName, Last Name: $lastName');
 
     if (email.isEmpty || password.isEmpty || firstName.isEmpty || lastName.isEmpty) {
       _showSnackBar('Please fill in all fields', isError: true);
@@ -60,12 +56,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     try {
       final userBox = await Hive.openBox<User>('users');
-      print('Hive box opened successfully. Current box length: ${userBox.length}');
 
       await userBox.add(newUser);
-
-      print('New user added. Updated box length: ${userBox.length}');
-      print('All users: ${userBox.values.map((u) => '${u.email}: ${u.firstName} ${u.lastName}').join(', ')}');
 
       await userBox.close();
 
@@ -74,7 +66,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _showSnackBar('Registration successful');
       Navigator.of(context).pop();
     } catch (e) {
-      print('Error during sign up: $e');
       if (mounted) _showSnackBar('An error occurred during sign up: $e', isError: true);
     }
   }
@@ -92,11 +83,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       final userBox = await Hive.openBox<User>('users');
       await userBox.clear();
-      print('All users cleared. Current box length: ${userBox.length}');
       await userBox.close();
       _showSnackBar('All users cleared');
     } catch (e) {
-      print('Error clearing users: $e');
       _showSnackBar('Error clearing users: $e', isError: true);
     }
   }
