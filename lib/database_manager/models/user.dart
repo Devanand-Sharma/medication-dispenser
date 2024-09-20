@@ -2,20 +2,32 @@ import 'package:hive/hive.dart';
 
 part 'user.g.dart';
 
-@HiveType(typeId: 0)
-class User with HiveObjectMixin {
-  User({
-    required this.fname,
-    required this.lname,
-    required this.medications,
-  });
-
+@HiveType(typeId: 6)
+class User extends HiveObject {
   @HiveField(0)
-  String fname;
+  String email;
 
   @HiveField(1)
-  String lname;
+  String password;
 
   @HiveField(2)
-  HiveList medications;
+  String? firstName;
+
+  @HiveField(3)
+  String? lastName;
+
+  @HiveField(4)
+  DateTime? dateOfBirth;
+
+  @HiveField(5)
+  String? gender;
+
+  User({
+    required this.email,
+    required this.password,
+    this.firstName,
+    this.lastName,
+    this.dateOfBirth,
+    this.gender,
+  });
 }
