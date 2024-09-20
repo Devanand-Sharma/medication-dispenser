@@ -25,6 +25,7 @@ class _MedicationCardState extends ConsumerState<MedicationCard> {
         MaterialPageRoute(
           builder: (context) => MedicationFormScreen(
             medication: widget.medication,
+            isEditing: true,
           ),
         ),
       ),
