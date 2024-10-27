@@ -1,12 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
+import 'package:medication_app/models/scheduled_time.dart';
 
 import 'package:medication_app/models/medication.dart';
 import 'package:medication_app/models/medication_route.dart';
 import 'package:medication_app/models/medication_frequency.dart';
-import 'package:medication_app/models/prescription.dart';
-import 'package:medication_app/models/dosage.dart';
 
 import 'package:medication_app/screens/medication_form.dart';
 
@@ -57,31 +55,31 @@ class _CameraWidgetState extends State<CameraWidget> {
       // final image = await _controller.takePicture();
       // TODO: process image here
 
-      const uuid = Uuid();
-
       if (context.mounted) {
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => MedicationFormScreen(
               medication: Medication(
-                id: uuid.v4(),
+                id: 4,
                 name: 'Camera Medication',
                 condition: 'Medcation App',
                 route: MedicationRoute.inhaler,
                 dose: 1,
-                dosage: Dosage(
-                  frequency: MedicationFrequency.onceADay,
-                  scheduledTimes: [
-                    const TimeOfDay(hour: 2, minute: 59),
-                  ],
-                  startDate: DateTime(2024, 9, 1, 2, 59),
-                  endDate: DateTime(2024, 9, 29, 2, 59),
-                ),
-                prescription: Prescription(
-                    totalQuantity: 1000,
-                    remainingQuantity: 500,
-                    thresholdQuantity: 10,
-                    isRefillReminder: true),
+                frequency: MedicationFrequency.onceADay,
+                startDate: DateTime(2024, 9, 1, 2, 59),
+                endDate: DateTime(2024, 9, 29, 2, 59),
+                totalQuantity: 1000,
+                remainingQuantity: 500,
+                thresholdQuantity: 10,
+                isRefillReminder: true,
+                scheduledTimes: [
+                  ScheduledTime(
+                      id: 0,
+                      time: const TimeOfDay(hour: 2, minute: 59),
+                      medicationId: 0),
+                ],
+                administeredTimes: [],
+                refillDates: [],
               ),
               isEditing: false,
             ),

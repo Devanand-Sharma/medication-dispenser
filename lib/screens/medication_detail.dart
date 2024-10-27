@@ -82,7 +82,9 @@ class _MedicationDetailScreenState
           TextButton(
             onPressed: () async {
               Navigator.of(ctx).pop(); // Close the dialog
-              ref.read(medicationProvider).removeMedication(widget.medication);
+              await ref
+                  .read(medicationProvider.notifier)
+                  .removeMedication(widget.medication);
               Navigator.of(context).pop(); // Return to Medication Card
             },
             child: const Text('Delete'),

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,7 +27,7 @@ class MedicationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final medications = ref.watch(medicationProvider).medications;
+    final medicationAsyncValue = ref.watch(medicationProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,19 +46,51 @@ class MedicationScreen extends ConsumerWidget {
       ),
       body: Container(
         color: Theme.of(context).colorScheme.primaryContainer,
-        child: Column(children: [
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(5),
-              shrinkWrap: true,
-              itemCount: medications.length,
-              itemBuilder: (context, index) {
-                final medication = medications[index];
-                return MedicationCard(medication);
-              },
+        child: medicationAsyncValue.when(
+          data: (medications) => RefreshIndicator(
+            onRefresh: () =>
+                ref.refresh(medicationProvider.notifier).fetchMedications(),
+            child: medications.isEmpty
+                ? SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height -
+                          kBottomNavigationBarHeight -
+                          MediaQuery.of(context).padding.bottom -
+                          kToolbarHeight,
+                      alignment: Alignment.center,
+                      child: const Text('No Medications'),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(5),
+                    itemCount: medications.length,
+                    itemBuilder: (context, index) =>
+                        MedicationCard(medications[index]),
+                  ),
+          ),
+          loading: () => Center(
+            child: Platform.isIOS
+                ? const CupertinoActivityIndicator()
+                : const CircularProgressIndicator(),
+          ),
+          error: (error, stackTrace) => RefreshIndicator(
+            onRefresh: () =>
+                ref.refresh(medicationProvider.notifier).fetchMedications(),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Container(
+                height: MediaQuery.of(context).size.height -
+                    kBottomNavigationBarHeight -
+                    MediaQuery.of(context).padding.bottom -
+                    kToolbarHeight,
+                alignment: Alignment.center,
+                child: const Text(
+                    'Unable to load medications. Please try again later.'),
+              ),
             ),
-          )
-        ]),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _createNewMedication(context),
