@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:medication_app/screens/history.dart';
 import 'package:medication_app/screens/home.dart';
 import 'package:medication_app/screens/medication.dart';
 import 'package:medication_app/widgets/more_drawer.dart';
 
-const List<Map<String, dynamic>> pages = [
+final List<Map<String, dynamic>> pages = [
   {
-    'page': HomeScreen(),
+    'page': HomeScreen(user: FirebaseAuth.instance.currentUser!),
     'title': 'Home',
   },
   {
@@ -21,21 +22,36 @@ const List<Map<String, dynamic>> pages = [
 ];
 
 class TabsScreen extends StatefulWidget {
-  static const routeName = '/';
-  const TabsScreen({super.key});
+  static const String routeName = '/tabs';
+  final User user;
+
+  const TabsScreen({Key? key, required this.user}) : super(key: key);
 
   @override
-  State<TabsScreen> createState() => __TabsScreenState();
+  State<TabsScreen> createState() => _TabsScreenState();
 }
 
-class __TabsScreenState extends State<TabsScreen> {
+class _TabsScreenState extends State<TabsScreen> {
   late List<Map<String, dynamic>> _pages;
   int _selectedPageIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _pages = pages;
+    _pages = [
+      {
+        'page': HomeScreen(user: widget.user),
+        'title': 'Home',
+      },
+      {
+        'page': MedicationScreen(),
+        'title': 'Medication',
+      },
+      {
+        'page': HistoryScreen(),
+        'title': 'History',
+      },
+    ];
   }
 
   // ? Might not need this, since parent widget is stateless
@@ -54,7 +70,7 @@ class __TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const MoreDrawer(),
+      drawer: MoreDrawer(user: widget.user),
       body: _pages[_selectedPageIndex]['page'] as Widget,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,

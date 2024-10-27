@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 final List<Map<String, dynamic>> drawerList = [
   {
@@ -29,7 +30,9 @@ final List<Map<String, dynamic>> drawerList = [
 ];
 
 class MoreDrawer extends StatelessWidget {
-  const MoreDrawer({super.key});
+  final User user;
+
+  const MoreDrawer({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -60,24 +63,44 @@ class MoreDrawer extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Text(
-                  'John Doe',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      user.displayName ?? 'User',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-          ...drawerList.map(
-            (item) => ListTile(
-              leading: Icon(item['icon'] as IconData),
-              title: Text(item['title'] as String),
-              onTap: () {
-                Scaffold.of(context).closeDrawer();
-                Navigator.of(context).pushNamed(item['route']);
-              },
+          Expanded(
+            child: ListView(
+              children: [
+                ...drawerList.map(
+                  (item) => ListTile(
+                    leading: Icon(item['icon'] as IconData),
+                    title: Text(item['title'] as String),
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      Navigator.of(context).pushNamed(item['route']);
+                    },
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.of(context).pushReplacementNamed('/login');
+                  },
+                ),
+              ],
             ),
           ),
-          const Divider(),
         ],
       ),
     );
