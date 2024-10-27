@@ -17,14 +17,19 @@ import 'package:medication_app/screens/tabs.dart';
 import 'package:medication_app/screens/login.dart';
 import 'package:medication_app/screens/signup.dart';
 import 'firebase_options.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    Firebase.app();
+  } catch (e) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
 
   final cameras = await availableCameras();
   CameraDescription? camera;
