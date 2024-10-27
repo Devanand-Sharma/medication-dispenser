@@ -4,10 +4,10 @@ class AdministeredTime {
   AdministeredTime({
     required this.time,
     required this.status,
-    this.isReminder = true,
+    required this.medicationId,
   });
 
   DateTime time;
   AdministeredStatus status;
-  bool isReminder;
+  int medicationId;
 }

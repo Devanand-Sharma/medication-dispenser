@@ -5,8 +5,6 @@ enum MedicationFrequency {
   everyXDays,
   everyXWeeks,
   everyXMonths,
-  // TODO: Add support for onARecurringCycle
-  // onARecurringCycle,
   onlyAsNeeded,
 }
 
@@ -25,8 +23,6 @@ extension MedicationFrequencyExtension on MedicationFrequency {
         return 'Every X Weeks';
       case MedicationFrequency.everyXMonths:
         return 'Every X Months';
-      // case MedicationFrequency.onARecurringCycle:
-      //   return 'On a Recurring Cycle';
       case MedicationFrequency.onlyAsNeeded:
         return 'Only as Needed';
     }
