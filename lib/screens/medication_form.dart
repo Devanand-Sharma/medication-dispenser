@@ -1,15 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:uuid/uuid.dart';
 
-import 'package:medication_app/models/dosage.dart';
+import 'package:medication_app/models/scheduled_time.dart';
 import 'package:medication_app/models/medication.dart';
 import 'package:medication_app/models/medication_route.dart';
 import 'package:medication_app/models/medication_frequency.dart';
-import 'package:medication_app/models/prescription.dart';
 import 'package:medication_app/providers/medication_provider.dart';
 import 'package:medication_app/utils/string.dart';
 
@@ -71,22 +71,20 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
       _condition = widget.medication!.condition;
       _medicationRoute = widget.medication!.route;
       _dose = widget.medication!.dose;
-      _thresholdQuantity = widget.medication!.prescription.thresholdQuantity;
-      _medicationFrequency = widget.medication!.dosage.frequency;
+      _thresholdQuantity = widget.medication!.thresholdQuantity;
+      _medicationFrequency = widget.medication!.frequency;
       _medicationFrequencyCount =
           setMedicationFrequencyCount(_medicationFrequency);
       _minMedicationFrequencyCount =
           setMinMedicationFrequencyCount(_medicationFrequency);
       _maxMedicationFrequencyCount =
           setMaxMedicationFrequencyCount(_medicationFrequency);
-      _medicationFrequencyCount = widget.medication!.dosage.frequencyCount;
-      for (int i = 0;
-          i < widget.medication!.dosage.scheduledTimes.length;
-          i++) {
-        _scheduledTimes[i] = widget.medication!.dosage.scheduledTimes[i];
+      _medicationFrequencyCount = widget.medication!.frequencyCount;
+      for (int i = 0; i < widget.medication!.scheduledTimes.length; i++) {
+        _scheduledTimes[i] = widget.medication!.scheduledTimes[i].time;
       }
-      _startDate = widget.medication!.dosage.startDate;
-      _endDate = widget.medication!.dosage.endDate;
+      _startDate = widget.medication!.startDate;
+      _endDate = widget.medication!.endDate;
       _instructions = widget.medication!.instructions;
     }
   }
@@ -97,20 +95,18 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
 
     if (widget.medication != null) {
       _totalQuantityController.text =
-          widget.medication!.prescription.totalQuantity.toString();
+          widget.medication!.totalQuantity.toString();
       _remainingQuantityController.text =
-          widget.medication!.prescription.remainingQuantity.toString();
-      for (int i = 0;
-          i < widget.medication!.dosage.scheduledTimes.length;
-          i++) {
+          widget.medication!.remainingQuantity.toString();
+      for (int i = 0; i < widget.medication!.scheduledTimes.length; i++) {
         _scheduledTimesControllers[i].text =
-            widget.medication!.dosage.scheduledTimes[i].format(context);
+            widget.medication!.scheduledTimes[i].time.format(context);
       }
       _startDateController.text =
-          DateFormat('dd-MMM-yyyy').format(widget.medication!.dosage.startDate);
-      if (widget.medication!.dosage.endDate != null) {
-        _endDateController.text = DateFormat('dd-MMM-yyyy')
-            .format(widget.medication!.dosage.endDate!);
+          DateFormat('dd-MMM-yyyy').format(widget.medication!.startDate);
+      if (widget.medication!.endDate != null) {
+        _endDateController.text =
+            DateFormat('dd-MMM-yyyy').format(widget.medication!.endDate!);
       }
     }
   }
@@ -138,47 +134,89 @@ class MedicationFormScreenState extends ConsumerState<MedicationFormScreen> {
   void submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      const uuid = Uuid();
-      late Medication upsertedMedcation;
+      Medication upsertedMedcation;
 
-      final scheduledTimes = _scheduledTimes
-          .where((time) => time != null)
-          .map((time) => time!)
-          .toList();
+      // Create temporary list of ScheduledTime objects
+      final List<ScheduledTime> scheduledTimes = [];
+      if (_medicationFrequencyCount != null) {
+        for (int i = 0; i < _medicationFrequencyCount!; i++) {
+          if (_scheduledTimes[i] == null) {
+            continue;
+          }
+          scheduledTimes.add(
+            ScheduledTime(
+              id: widget.medication?.scheduledTimes[i].id ?? 0,
+              time: _scheduledTimes[i]!,
+              medicationId: widget.medication?.id ?? 0,
+            ),
+          );
+        }
+      } else {
+        scheduledTimes.add(
+          ScheduledTime(
+            id: widget.medication?.scheduledTimes[0].id ?? 0,
+            time: _scheduledTimes[0]!,
+            medicationId: widget.medication?.id ?? 0,
+          ),
+        );
+      }
 
+      // Create temporary Medication object with the form data, this will be converted to json
       final newMedication = Medication(
-        id: widget.medication == null ? uuid.v4() : widget.medication!.id,
+        id: widget.medication?.id ?? 0,
         name: _name!,
         condition: _condition!,
         route: _medicationRoute!,
         dose: _dose!,
-        dosage: Dosage(
-          frequency: _medicationFrequency!,
-          frequencyCount: _medicationFrequencyCount,
-          scheduledTimes: scheduledTimes,
-          startDate: _startDate!,
-          endDate: _endDate,
-        ),
-        prescription: Prescription(
-          totalQuantity: int.parse(_totalQuantityController.text),
-          remainingQuantity: int.parse(_remainingQuantityController.text),
-          thresholdQuantity: _thresholdQuantity,
-        ),
+        totalQuantity: int.parse(_totalQuantityController.text),
+        remainingQuantity: int.parse(_remainingQuantityController.text),
+        thresholdQuantity: _thresholdQuantity,
+        frequency: _medicationFrequency!,
+        frequencyCount: _medicationFrequencyCount,
+        startDate: _startDate!,
+        endDate: _endDate,
         instructions: _instructions,
+        scheduledTimes: scheduledTimes,
+        administeredTimes: [],
+        refillDates: [],
       );
 
       if (!widget.isEditing) {
         // Add Medication
-        ref.read(medicationProvider.notifier).addMedication(newMedication);
+        try {
+          await ref
+              .read(medicationProvider.notifier)
+              .addMedication(newMedication);
+        } catch (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                  'Failed to add medication. Please try again later.'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        }
         if (!context.mounted) return;
         Navigator.of(context).popUntil(ModalRoute.withName('/'));
       } else {
         // Update Medication
-        upsertedMedcation = ref.read(medicationProvider).updateMedication(
-              newMedication,
-            );
-        if (!context.mounted) return;
-        Navigator.of(context).pop(upsertedMedcation);
+        try {
+          upsertedMedcation = await ref
+              .read(medicationProvider.notifier)
+              .updateMedication(newMedication);
+          if (!context.mounted) return;
+          Navigator.of(context).pop(upsertedMedcation);
+        } catch (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                  'Failed to update medication. Please try again later.'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+          if (!context.mounted) return;
+          Navigator.of(context).pop();
+        }
       }
     }
   }

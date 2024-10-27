@@ -35,8 +35,7 @@ class MedicationCard extends StatelessWidget {
                 children: [
                   Text(medication.condition,
                       style: Theme.of(context).textTheme.bodySmall),
-                  Text(
-                      'x${medication.prescription.remainingQuantity.toString()}',
+                  Text('x${medication.remainingQuantity.toString()}',
                       style: Theme.of(context).textTheme.bodySmall),
                 ],
               ),
