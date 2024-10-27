@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:medication_app/widgets/home_medication_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  // final BuildContext parentContext;
-  const HomeScreen({super.key});
+  final User user;
+  const HomeScreen({Key? key, required this.user}) : super(key: key);
   static const appBarHeight = 115.0;
   static const appBarSpacing = 5.0;
 
@@ -72,8 +73,8 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const Gap(appBarSpacing),
-            const Text(
-              'John Doe',
+            Text(
+              user.displayName ?? 'User',
             )
           ],
         ),

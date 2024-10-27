@@ -49,6 +49,9 @@ dependencies:
   animated_text_kit: ^4.2.2
   uuid: ^4.5.0
   numberpicker: ^2.1.2
+  google_sign_in: ^6.1.0
+  firebase_auth: ^4.6.1
+  firebase_core: ^2.32.0
 
 dev_dependencies:
   flutter_test:
