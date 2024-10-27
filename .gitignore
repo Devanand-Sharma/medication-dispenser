@@ -889,3 +889,10 @@ DerivedData/
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# Environment variables
+.env
+
+# Firebase config files
+ios/Runner/GoogleService-Info.plist
+android/app/google-services.json

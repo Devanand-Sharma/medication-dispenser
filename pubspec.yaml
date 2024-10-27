@@ -53,6 +53,7 @@ dependencies:
   firebase_auth: ^4.6.1
   firebase_core: ^2.32.0
   dio: ^5.7.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -111,3 +112,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  assets:
+    - .env
